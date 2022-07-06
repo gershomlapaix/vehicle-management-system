@@ -3,7 +3,7 @@ const path = require("path");
 const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
-const {Swaggiffy} = require("swaggiffy");
+const { Swaggiffy } = require("swaggiffy");
 
 const app = express();
 
@@ -14,7 +14,7 @@ app.use(cookieParser());
 app.use(
   cors({
     // origin: "http://localhost:80",
-    origin:"http://localhost:3000",
+    origin: "http://localhost:3000",
     credentials: true,
   })
 );
@@ -37,6 +37,7 @@ app.use(
 //   })
 // );
 
+// checking the cookes in browser
 /*
 app.use((req, res, next) => {
   console.log(req.cookies.votieToken);
@@ -49,8 +50,10 @@ app.use(express.json({ limit: "150mb" }));
 
 /**
  * Defining the routes
- * 
+ *
  */
+
+app.use("/vehicles", require("./routes/vehicles"));
 
 // configure swagger
 new Swaggiffy().setupExpress(app).swaggiffy();
