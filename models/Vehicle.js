@@ -17,7 +17,7 @@ const vehicleSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  platerNumber: {
+  plateNumber: {
     type: String,
     required: true,
   },
