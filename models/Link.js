@@ -11,4 +11,13 @@ const linkSchema = new mongoose.Schema({
     type: mongoose.Types.ObjectId,
     ref: "vehicles",
   },
+
+  plateNumber: {
+    type: String,
+    required: true,
+  },
 });
+
+const Link = mongoose.model("links", linkSchema);
+
+module.exports = Link;
