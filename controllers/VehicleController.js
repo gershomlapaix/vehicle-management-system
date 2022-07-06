@@ -6,18 +6,19 @@ exports.registerVehicle = async (req, res) => {
     manufacturingCompany,
     manufacturingYear,
     price,
-    plateNumber,
     modelName,
   } = req.body;
 
-  const createdVehicle = await Vehicle.create({
-    chasisNumber,
-    manufacturingCompany,
-    manufacturingYear,
-    price,
-    plateNumber,
-    modelName,
-  });
+  try {
+    const createdVehicle = await Vehicle.create({
+      chasisNumber,
+      manufacturingCompany,
+      manufacturingYear,
+      modelName,
+    });
+  } catch (err) {
+    console.log("Something went wrong", err);
+  }
 
   res.json({ message: `New vehicle created` }).status(201);
 };

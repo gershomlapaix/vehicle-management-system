@@ -19,7 +19,6 @@ const vehicleSchema = new mongoose.Schema({
   },
   plateNumber: {
     type: String,
-    required: true,
   },
   modelName: {
     type: String,

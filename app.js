@@ -48,12 +48,14 @@ app.use((req, res, next) => {
 app.use(morgan("dev"));
 app.use(express.json({ limit: "150mb" }));
 
+
+
 /**
  * Defining the routes
  *
  */
 
-app.use("/vehicles", require("./routes/vehicles"));
+app.use("/api/vehicles", require("./routes/VehicleRoutes"));
 
 // configure swagger
 new Swaggiffy().setupExpress(app).swaggiffy();
