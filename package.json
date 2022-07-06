@@ -1,0 +1,31 @@
+{
+  "name": "VMS-project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start:dev": "NODE_ENV=development nodemon server.js",
+    "start:container": "NODE_ENV=container nodemon server.js",
+    "start": "nodemon --ignore '*swagger.json' server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.1",
+    "ejs": "^3.1.8",
+    "express": "^4.18.1",
+    "global": "^4.4.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.4.1",
+    "mongoose-beautiful-unique-validation": "^7.1.1",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.19",
+    "swagger-jsdoc": "5.0.1",
+    "swagger-ui-express": "^4.4.0",
+    "swaggiffy": "^1.0.5"
+  }
+}
