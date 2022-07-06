@@ -56,6 +56,8 @@ app.use(express.json({ limit: "150mb" }));
  */
 
 app.use("/api/vehicles", require("./routes/VehicleRoutes"));
+app.use("/api/vehicles/owner", require("./routes/VehicleOwnerRoutes"));
+
 
 // configure swagger
 new Swaggiffy().setupExpress(app).swaggiffy();
