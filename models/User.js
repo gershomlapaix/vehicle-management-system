@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema({
   lastName: {
     type: String,
   },
-  
+
   email: {
     type: String,
     unique: true,
@@ -17,9 +17,16 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
   },
+  phone: {
+    type: String,
+    unique: true,
+  },
+  nationalId: {
+    type: String,
+  },
   role: {
     type: String,
-    enum: ["USER", "ADMIN"],
+    enum: ["ADMIN", "USER"],
     default: "USER",
   },
 });

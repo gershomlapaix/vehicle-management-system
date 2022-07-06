@@ -55,8 +55,10 @@ app.use(express.json({ limit: "150mb" }));
  *
  */
 
+ app.use("/api/users", require("./routes/authRoutes"));
 app.use("/api/vehicles", require("./routes/VehicleRoutes"));
 app.use("/api/vehicles/owner", require("./routes/VehicleOwnerRoutes"));
+app.use("/api/linking", require("./routes/LinkRoutes"));
 
 
 // configure swagger

@@ -1,4 +1,6 @@
 const mongoose = require("mongoose");
+const { registerSchema, registerSchemas } = require("swaggiffy");
+
 
 const vehicleOwnerSchema = new mongoose.Schema(
   {
@@ -32,4 +34,5 @@ const vehicleOwnerSchema = new mongoose.Schema(
 );
 
 const VehicleOwner = mongoose.model("vehicleOwner", vehicleOwnerSchema);
+registerSchema("owners", vehicleOwnerSchema, { orm: "mongoose" });
 module.exports = VehicleOwner;

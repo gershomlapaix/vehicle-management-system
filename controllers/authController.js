@@ -11,7 +11,7 @@ const signToken = (id, role) => {
 const createToken = (user, statusCode, req, res) => {
   const token = signToken(user._id);
 
-  res.cookie("votieToken", token, {
+  res.cookie("vmsToken", token, {
     secure: false,
     httpOnly: true,
   });
@@ -27,17 +27,29 @@ const createToken = (user, statusCode, req, res) => {
   });
 };
 
-
 exports.register = async (req, res) => {
-  const { names, email, password } = req.body;
+  const { names, email, password, nationalId, phoneNumber } = req.body;
 
-  const newUser = await User.create({
-    names,
-    email,
-    password,
-  });
+  const user = await User.findOne({ nationalId, phoneNumber,email });
 
-  res.json({ message: `New user created` }).status(201);
+  try {
+    if (user) {
+      return res.status(400).json({
+        status: "fail",
+        message: "User already exists",
+      });
+    } else {
+      const newUser = await User.create({
+        names,
+        email,
+        password,
+      });
+  
+      res.json({ message: `New user created` }).status(201);
+    }
+  } catch (err) {
+    console.log("something went wrong",err);
+  }
 };
 
 exports.signin = async (req, res, next) => {
@@ -65,18 +77,15 @@ exports.protect = async (req, res, next) => {
       req.headers.authorization.startsWith("Bearer")
     ) {
       token = req.headers.authorization.split(" ")[1];
-    } else if (req.cookies.votieToken) {
-      token = req.cookies.votieToken;
+    } else if (req.cookies.vmsToken) {
+      token = req.cookies.vmsToken;
     }
 
     if (!token) {
       return next(new Error("You're not logged in.", 401));
     }
 
-    const decoded = await promisify(jwt.verify)(
-      token,
-      process.env.JWT_SECRET
-    );
+    const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
 
     const properUser = await User.findById(decoded.id);
     if (!properUser) {
@@ -92,13 +101,10 @@ exports.protect = async (req, res, next) => {
 
 exports.checkLogin = async (req, res) => {
   try {
-    const token = req.cookies.votieToken;
+    const token = req.cookies.vmsToken;
     if (!token) return res.json(false);
 
-    await promisify(jwt.verify)(
-      req.cookies.votieToken,
-      process.env.JWT_SECRET
-    );
+    await promisify(jwt.verify)(req.cookies.vmsToken, process.env.JWT_SECRET);
 
     res.send(true);
   } catch (err) {
@@ -118,4 +124,17 @@ exports.updateUser = async (req, res, next) => {
   res.status(204).json({
     status: "success",
   });
+};
+
+
+exports.restrictTo = (...roles) => {
+  return (req, res, next) => {
+    if (!roles.includes(req.user.role)) {
+      return next(
+        new AppError("You don't have permission to perform this action", 403)
+      );
+    }
+
+    next();
+  };
 };

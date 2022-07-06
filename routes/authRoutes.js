@@ -1,10 +1,13 @@
 const express = require("express");
+// const authController = require("../controllers/authController");
 const { registerDefinition, registerDefinitions } = require("swaggiffy");
-const userController = require("./../controller/userController");
+const userController = require("./../controllers/authController");
 
 const router = express.Router();
 
-router.route("/register").post(userController.register);
+router
+  .route("/register")
+  .post(userController.register);
 
 // define the swgger document for this API
 

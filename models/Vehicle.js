@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { registerSchema, registerSchemas } = require("swaggiffy");
 
 const vehicleSchema = new mongoose.Schema({
   chasisNumber: {
@@ -27,4 +28,6 @@ const vehicleSchema = new mongoose.Schema({
 });
 
 const Vehicle = mongoose.model("vehicles", vehicleSchema);
+registerSchema("vehicles", vehicleSchema, { orm: "mongoose" });
+
 module.exports = Vehicle;
