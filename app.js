@@ -11,6 +11,9 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(cookieParser());
 
+/**
+ * defining the middlewares
+ * */ 
 app.use(
   cors({
     // origin: "http://localhost:80",
@@ -18,32 +21,6 @@ app.use(
     credentials: true,
   })
 );
-
-// const whitelist = [
-//   "http://localhost:80",
-//   "http://localhost",
-//   "http://localhost:3000",
-// ];
-// app.use(
-//   cors({
-//     credentials: true,
-//     origin: function (origin, callback) {
-//       if (whitelist.indexOf(origin) !== -1) {
-//         callback(null, true);
-//       } else {
-//         callback(new Error("Not allowed by CORS"));
-//       }
-//     },
-//   })
-// );
-
-// checking the cookes in browser
-/*
-app.use((req, res, next) => {
-  console.log(req.cookies.votieToken);
-  next()
-});
-*/
 
 app.use(morgan("dev"));
 app.use(express.json({ limit: "150mb" }));
@@ -56,10 +33,7 @@ app.use(express.json({ limit: "150mb" }));
  */
 
  app.use("/api/users", require("./routes/authRoutes"));
-app.use("/api/vehicles", require("./routes/VehicleRoutes"));
-app.use("/api/vehicles/owner", require("./routes/VehicleOwnerRoutes"));
-app.use("/api/linking", require("./routes/LinkRoutes"));
-
+ app.use("/api/vote", require("./routes/pollingRoutes"));
 
 // configure swagger
 new Swaggiffy().setupExpress(app).swaggiffy();

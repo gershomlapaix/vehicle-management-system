@@ -11,7 +11,7 @@ const signToken = (id, role) => {
 const createToken = (user, statusCode, req, res) => {
   const token = signToken(user._id);
 
-  res.cookie("vmsToken", token, {
+  res.cookie("necToken", token, {
     secure: false,
     httpOnly: true,
   });
@@ -30,7 +30,13 @@ const createToken = (user, statusCode, req, res) => {
 exports.register = async (req, res) => {
   const { names, email, password, nationalId, phoneNumber } = req.body;
 
-  const user = await User.findOne({ nationalId, phoneNumber,email });
+  // if(!names || !email || !password || !nationalId || !phoneNumber){
+  //   return res.status(400).json({
+  //     status: "fail",
+  //     error: "provide all the fields",
+  //   });
+  // }
+  const user = await User.findOne({ nationalId, phoneNumber, email });
 
   try {
     if (user) {
@@ -43,12 +49,14 @@ exports.register = async (req, res) => {
         names,
         email,
         password,
+        nationalId,
+        phoneNumber,
       });
-  
+
       res.json({ message: `New user created` }).status(201);
     }
   } catch (err) {
-    console.log("something went wrong",err);
+    console.log("something went wrong", err);
   }
 };
 
@@ -77,8 +85,8 @@ exports.protect = async (req, res, next) => {
       req.headers.authorization.startsWith("Bearer")
     ) {
       token = req.headers.authorization.split(" ")[1];
-    } else if (req.cookies.vmsToken) {
-      token = req.cookies.vmsToken;
+    } else if (req.cookies.necToken) {
+      token = req.cookies.necToken;
     }
 
     if (!token) {
@@ -101,10 +109,10 @@ exports.protect = async (req, res, next) => {
 
 exports.checkLogin = async (req, res) => {
   try {
-    const token = req.cookies.vmsToken;
+    const token = req.cookies.necToken;
     if (!token) return res.json(false);
 
-    await promisify(jwt.verify)(req.cookies.vmsToken, process.env.JWT_SECRET);
+    await promisify(jwt.verify)(req.cookies.necToken, process.env.JWT_SECRET);
 
     res.send(true);
   } catch (err) {
@@ -126,15 +134,15 @@ exports.updateUser = async (req, res, next) => {
   });
 };
 
-
 exports.restrictTo = (...roles) => {
   return (req, res, next) => {
     if (!roles.includes(req.user.role)) {
       return next(
-        new AppError("You don't have permission to perform this action", 403)
+        res.send("You don't have permission to perform this action").status(403)
       );
     }
 
+    console.log(req.user);
     next();
   };
 };

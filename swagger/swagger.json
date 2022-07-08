@@ -260,7 +260,7 @@
           ]
         }
       },
-      "/api/vehicles/register": {
+      "/api/vote": {
         "post": {
           "tags": [
             "Polls"
@@ -273,7 +273,7 @@
               "name": "body",
               "required": true,
               "schema": {
-                "$ref": "#/definitions/vehicles"
+                "$ref": "#/definitions/polls"
               }
             }
           ],
@@ -287,7 +287,7 @@
             "201": {
               "description": "Created",
               "schema": {
-                "$ref": "#/definitions/vehicles"
+                "$ref": "#/definitions/polls"
               }
             },
             "500": {
@@ -303,14 +303,21 @@
           ]
         }
       },
-      "/api/vehicles/getall": {
+      "/api/vote/{id}": {
         "get": {
           "tags": [
             "Polls"
           ],
           "summary": "",
           "description": "",
-          "parameters": [],
+          "parameters": [
+            {
+              "in": "path",
+              "name": "id",
+              "required": true,
+              "type": "string"
+            }
+          ],
           "consumes": [
             "application/json"
           ],
@@ -323,7 +330,7 @@
               "schema": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/definitions/vehicles"
+                  "$ref": "#/definitions/polls"
                 }
               }
             },
@@ -349,99 +356,21 @@
           ]
         }
       },
-      "/api/vehicles/remove": {
-        "delete": {
+      "/api/vote/recorded/{id}": {
+        "get": {
           "tags": [
             "Polls"
           ],
           "summary": "",
           "description": "",
-          "parameters": [],
-          "consumes": [
-            "application/json"
-          ],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "200": {
-              "description": "OK",
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "deleted": {
-                    "type": "boolean",
-                    "example": true
-                  }
-                }
-              }
-            },
-            "500": {
-              "description": "Internal Server Error"
-            }
-          },
-          "security": [
-            {
-              "Bearer": [
-                "global"
-              ]
-            }
-          ]
-        }
-      },
-      "/api/vehicles/owner/register": {
-        "post": {
-          "tags": [
-            "Vehicle",
-            "owners"
-          ],
-          "summary": "",
-          "description": "",
           "parameters": [
             {
-              "in": "body",
-              "name": "body",
+              "in": "path",
+              "name": "id",
               "required": true,
-              "schema": {
-                "$ref": "#/definitions/owners"
-              }
+              "type": "string"
             }
           ],
-          "consumes": [
-            "application/json"
-          ],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "201": {
-              "description": "Created",
-              "schema": {
-                "$ref": "#/definitions/owners"
-              }
-            },
-            "500": {
-              "description": "Internal Server Error"
-            }
-          },
-          "security": [
-            {
-              "Bearer": [
-                "global"
-              ]
-            }
-          ]
-        }
-      },
-      "/api/vehicles/owner/getall": {
-        "get": {
-          "tags": [
-            "Vehicle",
-            "owners"
-          ],
-          "summary": "",
-          "description": "",
-          "parameters": [],
           "consumes": [
             "application/json"
           ],
@@ -454,7 +383,7 @@
               "schema": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/definitions/owners"
+                  "$ref": "#/definitions/polls"
                 }
               }
             },
@@ -480,11 +409,69 @@
           ]
         }
       },
-      "/api/vehicles/owner/remove": {
+      "/api/vote/makevote/{id}/candidate/{candidateId}": {
+        "patch": {
+          "tags": [
+            "Polls"
+          ],
+          "summary": "",
+          "description": "",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "id",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "in": "path",
+              "name": "candidateId",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "consumes": [
+            "application/json"
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/polls"
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "error": {
+                    "type": "string",
+                    "example": "Internal Server Error"
+                  }
+                }
+              }
+            }
+          },
+          "security": [
+            {
+              "Bearer": [
+                "global"
+              ]
+            }
+          ]
+        }
+      },
+      "/api/vote/delete": {
         "delete": {
           "tags": [
-            "Vehicle",
-            "owners"
+            "Polls"
           ],
           "summary": "",
           "description": "",
@@ -542,7 +529,7 @@
             "type": "string",
             "example": "string"
           },
-          "phone": {
+          "phoneNumber": {
             "type": "string",
             "example": "string"
           },
@@ -565,79 +552,23 @@
           }
         }
       },
-      "vehicles": {
+      "polls": {
         "type": "object",
         "properties": {
-          "chasisNumber": {
+          "pollingTitle": {
             "type": "string",
             "example": "string"
           },
-          "manufacturingCompany": {
-            "type": "string",
-            "example": "string"
+          "candidates": {
+            "type": "array"
           },
-          "manufacturingYear": {
-            "type": "number",
-            "example": 0
-          },
-          "price": {
-            "type": "number",
-            "example": 0
-          },
-          "plateNumber": {
-            "type": "string",
-            "example": "string"
-          },
-          "modelName": {
-            "type": "string",
-            "example": "string"
+          "votes": {
+            "type": "array"
           },
           "_id": {
             "type": "string",
             "example": "507f1f77bcf86cd799439011",
             "required": true
-          },
-          "__v": {
-            "type": "number",
-            "example": 0
-          }
-        }
-      },
-      "owners": {
-        "type": "object",
-        "properties": {
-          "firstName": {
-            "type": "string",
-            "example": "string"
-          },
-          "lastName": {
-            "type": "string",
-            "example": "string"
-          },
-          "nationalId": {
-            "type": "string",
-            "example": "string"
-          },
-          "phoneNumber": {
-            "type": "string",
-            "example": "string"
-          },
-          "address": {
-            "type": "string",
-            "example": "string"
-          },
-          "_id": {
-            "type": "string",
-            "example": "507f1f77bcf86cd799439011",
-            "required": true
-          },
-          "updatedAt": {
-            "type": "string",
-            "example": "7/6/2022, 8:19:53 AM"
-          },
-          "createdAt": {
-            "type": "string",
-            "example": "7/6/2022, 8:19:53 AM"
           },
           "__v": {
             "type": "number",

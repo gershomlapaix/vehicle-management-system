@@ -17,16 +17,17 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
   },
-  phone: {
+  phoneNumber: {
     type: String,
-    unique: true,
+    // unique: true,
+    required: "Please enter your phone number",
   },
   nationalId: {
     type: String,
   },
   role: {
     type: String,
-    enum: ["ADMIN", "USER"],
+    enum: ["USER", "ADMIN"],
     default: "USER",
   },
 });
